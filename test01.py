@@ -1,27 +1,27 @@
 from flask import Flask, request
-app = Flask(__name__)
+application = Flask(__name__)
 
-@app.route('/')
+@application.route('/')
 def helloworld():
   return 'hello world!!'
 
-@app.route('/mypage')
+@application.route('/mypage')
 def mypage():
   print("!!!!!!!!!!!!この川!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
   return 'nice to meet you'
 
-@app.route('/fukai')
+@application.route('/fukai')
 def fukai():
   
   name = request.args.get('name')
   return name
 
 
-@app.route('/regist', methods=['POST'])
+@application.route('/regist', methods=['POST'])
 def regist():
   name = request.form['name']
   return name
 
-@app.route('/user/<userId>')
+@application.route('/user/<userId>')
 def userpage(userId=0):
   return userId
