@@ -25,3 +25,4 @@ def regist():
 @application.route('/user/<userId>')
 def userpage(userId=0):
   return userId
+
