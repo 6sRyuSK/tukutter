@@ -1,0 +1,27 @@
+<!-- {% extends "layout.html" %} -->
+
+{% block title %}
+一覧
+{% endblock %}
+
+{% block body %}
+
+<!-- <table border="1">
+{% for row in rows %}
+  <tr>
+    <td>{{row[1]}}<td>
+    <td><a href="/edit/{{row[0]}}">詳細見る</a></td>
+    <td><a href="/delete/{{row[0]}}">削除</a></td>
+  </tr>
+  
+ {% endfor %}
+
+</table> -->
+<div class="contents">
+{% for row in rows %}  
+  <p>{{row[0]}}</p>
+  <p>{{row[1]}}</p>
+{% endfor %}
+</div>
+
+{% endblock %}
