@@ -1,5 +1,6 @@
 import MySQLdb
 from flask import Flask, render_template, request, redirect, make_response
+import hashlib
 
 application = Flask(__name__)
 
@@ -42,26 +43,34 @@ def login_form():
 
 @application.route('/login', methods=['POST'])
 def login():
-  db = MySQLdb.connect( user='root', passwd='root', host='localhost', db='myapp', charset='utf8' )
+  db = MySQLdb.connect( user='root', passwd='root', host='localhost', db='tukutter', charset='utf8' )
   con = db.cursor()
   return None
 
 
+@application.route('/register')
+def register_form():
+  return render_template('register.html')
+
 @application.route('/register', methods=['POST'])
 def register():
   
-  # #mysqlに接続する
-  # db = MySQLdb.connect( user='root', passwd='root', host='localhost', db='myapp', charset='utf8')
-  # con = db.cursor()
+  login_id = request.form['login_id']
+  user_name = request.form['user_name']
+  user_pass = request.form['user_pass']
+  hashstring = hashlib.md5(user_pass.encode('utf-8')).hexdigest()
 
-  # #取得したタスクの内容をtodoテーブルに追加する
-  # sql = 'insert into users(login_id) value (%s)'
-  # con.execute(sql,[task])
-  # db.commit()
+  #mysqlに接続する
+  db = MySQLdb.connect( user='root', passwd='root', host='localhost', db='tukutter', charset='utf8')
+  con = db.cursor()
 
-  # #DBの切断
-  # db.close()
-  # con.close()
+  sql = 'insert into users(login_id, user_name, user_pass) value (%s, %s, %s)'
+  con.execute(sql,[login_id, user_name, hashstring])
+  db.commit()
+
+  #DBの切断
+  db.close()
+  con.close()
 
   # #新規追加が終わったら、一覧画面へジャンプする
   return redirect('http://localhost/')
