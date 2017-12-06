@@ -39,13 +39,30 @@ def tubuyaki_show():
 
 @application.route('/login')
 def login_form():
-  return "login"
+  return render_template('login.html')
 
 @application.route('/login', methods=['POST'])
 def login():
+  
+  login_id = request.form['login_id']
+  user_pass = request.form['user_pass']
+  hashstring = hashlib.md5(user_pass.encode('utf-8')).hexdigest()
+
   db = MySQLdb.connect( user='root', passwd='root', host='localhost', db='tukutter', charset='utf8' )
   con = db.cursor()
-  return None
+
+  sql = 'SELECT user_pass from users where login_id = %s'
+  con.execute(sql,[login_id])
+  db.commit()
+  result = con.fetchone()
+  #DBの切断
+  db.close()
+  con.close()
+
+  if hashstring == result[0]:
+    return "welcome"
+
+  return "not login"
 
 
 @application.route('/register')
