@@ -4,6 +4,20 @@ import hashlib
 
 application = Flask(__name__)
 
+def dbcon(sql, args):
+  db = MySQLdb.connect( user='root', passwd='root', host='localhost', db='tukutter', charset='utf8' )
+  con = db.cursor()
+
+  # sql = 'SELECT user_pass from users where login_id = %s'
+  con.execute(sql, args)
+  db.commit()
+  result = con.fetchall()
+  #DBの切断
+  db.close()
+  con.close()
+  return result
+
+
 @application.route('/')
 def top():
   db = MySQLdb.connect( user='root', passwd='root', host='localhost', db='tukutter', charset='utf8' )
@@ -43,17 +57,10 @@ def login_form():
   login_id = request.cookies.get('login_id', None)
   user_pass = request.cookies.get('user_pass', None)
   if login_id or user_pass is not None:
-    db = MySQLdb.connect( user='root', passwd='root', host='localhost', db='tukutter', charset='utf8' )
-    con = db.cursor()
-
     sql = 'SELECT user_pass from users where login_id = %s'
-    con.execute(sql,[login_id])
-    db.commit()
-    result = con.fetchone()
-    #DBの切断
-    db.close()
-    con.close()
-    if user_pass == result[0] and not user_pass == None:
+    args = [login_id]
+    result = dbcon(sql, args)
+    if user_pass == result[0][0] and not user_pass == None:
       return "loginnnnnn!!!!!!siteruyo"
   return render_template('login.html')
 
@@ -64,18 +71,11 @@ def login():
   user_pass = request.form['user_pass']
   hashstring = hashlib.md5(user_pass.encode('utf-8')).hexdigest()
 
-  db = MySQLdb.connect( user='root', passwd='root', host='localhost', db='tukutter', charset='utf8' )
-  con = db.cursor()
-
   sql = 'SELECT user_pass from users where login_id = %s'
-  con.execute(sql,[login_id])
-  db.commit()
-  result = con.fetchone()
-  #DBの切断
-  db.close()
-  con.close()
+  args = [login_id]
+  result = dbcon(sql, args)
 
-  if hashstring == result[0]:
+  if hashstring == result[0][0]:
     response = make_response('user_data')
     max_age = 60 * 60 * 24 * 120 # 120 days
     expires = max_age
@@ -107,17 +107,10 @@ def register():
   response.set_cookie('login_id', login_id)
   response.set_cookie('user_pass', hashstring)
 
-  #mysqlに接続する
-  db = MySQLdb.connect( user='root', passwd='root', host='localhost', db='tukutter', charset='utf8')
-  con = db.cursor()
 
   sql = 'insert into users(login_id, user_name, user_pass) value (%s, %s, %s)'
-  con.execute(sql,[login_id, user_name, hashstring])
-  db.commit()
-
-  #DBの切断
-  db.close()
-  con.close()
+  args = [login_id, user_name, hashstring]
+  result = dbcon(sql, args)
 
   # #新規追加が終わったら、一覧画面へジャンプする
   return redirect('http://localhost/')
