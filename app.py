@@ -39,6 +39,22 @@ def tubuyaki_show():
 
 @application.route('/login')
 def login_form():
+  
+  login_id = request.cookies.get('login_id', None)
+  user_pass = request.cookies.get('user_pass', None)
+  
+  db = MySQLdb.connect( user='root', passwd='root', host='localhost', db='tukutter', charset='utf8' )
+  con = db.cursor()
+
+  sql = 'SELECT user_pass from users where login_id = %s'
+  con.execute(sql,[login_id])
+  db.commit()
+  result = con.fetchone()
+  #DBの切断
+  db.close()
+  con.close()
+  if user_pass == result[0] and not user_pass == None:
+    return "loginnnnnn!!!!!!siteruyo"
   return render_template('login.html')
 
 @application.route('/login', methods=['POST'])
@@ -60,7 +76,15 @@ def login():
   con.close()
 
   if hashstring == result[0]:
-    return "welcome"
+    response = make_response('user_data')
+    max_age = 60 * 60 * 24 * 120 # 120 days
+    expires = max_age
+    response.set_cookie('login_id', login_id)
+    response.set_cookie('user_pass', hashstring)
+    print(login_id)
+
+
+    return response
 
   return "not login"
 
@@ -76,6 +100,12 @@ def register():
   user_name = request.form['user_name']
   user_pass = request.form['user_pass']
   hashstring = hashlib.md5(user_pass.encode('utf-8')).hexdigest()
+
+  response = make_response('user_data')
+  max_age = 60 * 60 * 24 * 120 # 120 days
+  expires = max_age
+  response.set_cookie('login_id', login_id)
+  response.set_cookie('user_pass', hashstring)
 
   #mysqlに接続する
   db = MySQLdb.connect( user='root', passwd='root', host='localhost', db='tukutter', charset='utf8')
