@@ -42,19 +42,19 @@ def login_form():
   
   login_id = request.cookies.get('login_id', None)
   user_pass = request.cookies.get('user_pass', None)
-  
-  db = MySQLdb.connect( user='root', passwd='root', host='localhost', db='tukutter', charset='utf8' )
-  con = db.cursor()
+  if login_id or user_pass is not None:
+    db = MySQLdb.connect( user='root', passwd='root', host='localhost', db='tukutter', charset='utf8' )
+    con = db.cursor()
 
-  sql = 'SELECT user_pass from users where login_id = %s'
-  con.execute(sql,[login_id])
-  db.commit()
-  result = con.fetchone()
-  #DBの切断
-  db.close()
-  con.close()
-  if user_pass == result[0] and not user_pass == None:
-    return "loginnnnnn!!!!!!siteruyo"
+    sql = 'SELECT user_pass from users where login_id = %s'
+    con.execute(sql,[login_id])
+    db.commit()
+    result = con.fetchone()
+    #DBの切断
+    db.close()
+    con.close()
+    if user_pass == result[0] and not user_pass == None:
+      return "loginnnnnn!!!!!!siteruyo"
   return render_template('login.html')
 
 @application.route('/login', methods=['POST'])
