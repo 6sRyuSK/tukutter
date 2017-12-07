@@ -76,7 +76,7 @@ def login():
   result = dbcon(sql, args)
 
   if hashstring == result[0][0]:
-    response = make_response('user_data')
+    response = make_response(redirect('http://localhost/'))
     max_age = 60 * 60 * 24 * 120 # 120 days
     expires = max_age
     response.set_cookie('login_id', login_id)
@@ -101,7 +101,7 @@ def register():
   user_pass = request.form['user_pass']
   hashstring = hashlib.md5(user_pass.encode('utf-8')).hexdigest()
 
-  response = make_response('user_data')
+  response = make_response(redirect('http://localhost/'))
   max_age = 60 * 60 * 24 * 120 # 120 days
   expires = max_age
   response.set_cookie('login_id', login_id)
