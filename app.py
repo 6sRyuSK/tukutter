@@ -33,25 +33,17 @@ def logcheck():
 
 @application.route('/')
 def top():
-  db = MySQLdb.connect( user='root', passwd='root', host='localhost', db='tukutter', charset='utf8' )
-  con = db.cursor()
+  log = logcheck()
+  if log[0] is not True:
+    return log  #template login_html
 
 
-  login_user_id = 2 #とりあえずjiroでログイン
+  login_user_id = log[1]
   sql = "SELECT users.user_name, content FROM tubuyaki inner join users on tubuyaki.user_id = users.id inner join follow on tubuyaki.user_id = follow.follow_id where follow.user_id = %s"
-  con.execute(sql,[login_user_id])
+  args = [login_user_id]
+  result = dbcon(sql, args)
 
-  #値を2次元配列で取得。
-  result = con.fetchall()
-
-  #DBの切断
-  db.close()
-  con.close()
-
-  #一覧のデータをtimeline.htmlに渡して、ループで表示させる
   return render_template('timeline.html', rows=result)
-
-  return "top page"
 
 @application.route('/user/<user_id>')
 def user_prof():
