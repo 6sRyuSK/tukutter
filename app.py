@@ -119,4 +119,4 @@ def register():
   result = dbcon(sql, args)
 
   # #新規追加が終わったら、一覧画面へジャンプする
-  return redirect('http://localhost/')
+  return response
