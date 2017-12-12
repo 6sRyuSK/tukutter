@@ -18,14 +18,16 @@ def dbcon(sql, args):
   return result
 
 def logcheck():
-  login_id = request.cookies.get('login_id', None)
+  user_id = request.cookies.get('user_id', None)
   user_pass = request.cookies.get('user_pass', None)
-  if login_id and user_pass is not None:
-    sql = 'SELECT user_pass from users where login_id = %s'
-    args = [login_id]
+  if user_id and user_pass is not None:
+    sql = 'SELECT user_pass, login_id, user_name from users where id = %s'
+    args = [user_id]
     result = dbcon(sql, args)
+    login_id = result[0][1]
+    user_name = result[0][2]
     if user_pass == result[0][0]:
-      return [True, login_id, user_pass]
+      return [True, user_id, login_id, user_name]
   else:
     return render_template('login.html')
 
@@ -82,10 +84,12 @@ def login():
   result = dbcon(sql, args)
 
   if hashstring == result[0][0]:
+    sql = 'SELECT id from users where login_id = %s'
+    args = [login_id]
+    result = dbcon(sql, args)
+    user_id = str(result[0][0])
     response = make_response(redirect('http://localhost/'))
-    max_age = 60 * 60 * 24 * 120 # 120 days
-    expires = max_age
-    response.set_cookie('login_id', login_id)
+    response.set_cookie('user_id', user_id)
     response.set_cookie('user_pass', hashstring)
     print(login_id)
 
@@ -107,16 +111,25 @@ def register():
   user_pass = request.form['user_pass']
   hashstring = hashlib.md5(user_pass.encode('utf-8')).hexdigest()
 
-  response = make_response(redirect('http://localhost/'))
-  max_age = 60 * 60 * 24 * 120 # 120 days
-  expires = max_age
-  response.set_cookie('login_id', login_id)
-  response.set_cookie('user_pass', hashstring)
+  
 
-
-  sql = 'insert into users(login_id, user_name, user_pass) value (%s, %s, %s)'
-  args = [login_id, user_name, hashstring]
+  sql = 'SELECT login_id from users where login_id = %s'
+  args = [login_id]
   result = dbcon(sql, args)
+  if result is ():
+    response = make_response(redirect('http://localhost/'))
+    sql = 'INSERT into users(login_id, user_name, user_pass) value (%s, %s, %s)'
+    args = [login_id, user_name, hashstring]
+    result = dbcon(sql, args)
+    sql = 'SELECT id from users where login_id = %s'
+    args = [login_id]
+    result = dbcon(sql, args)
+    user_id = str(result[0][0])
+    response.set_cookie('user_id', user_id)
+    response.set_cookie('user_pass', hashstring)
+    return response
+  return render_template('register.html', error=1)
+  
 
-  # #新規追加が終わったら、一覧画面へジャンプする
-  return response
+  
+  
