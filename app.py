@@ -37,13 +37,21 @@ def top():
   if log[0] is not True:
     return log  #template login_html
 
-
   login_user_id = log[1]
-  sql = "SELECT users.user_name, content FROM tubuyaki inner join users on tubuyaki.user_id = users.id inner join follow on tubuyaki.user_id = follow.follow_id where follow.user_id = %s"
+  sql = "SELECT users.user_name, content, tubuyaki.post_time FROM tubuyaki inner join users on tubuyaki.user_id = users.id inner join follow on tubuyaki.user_id = follow.follow_id where follow.user_id = %s and delete_flg = 0 ORDER BY tubuyaki.id DESC"
   args = [login_user_id]
   result = dbcon(sql, args)
-
   return render_template('timeline.html', rows=result)
+
+@application.route('/search')
+def search():
+  search_query = "%"+request.args.get('search_query')+"%"
+  if search_query is not None:
+    sql = "SELECT users.user_name, content, tubuyaki.post_time FROM tubuyaki inner join users on tubuyaki.user_id = users.id where delete_flg = 0 and content LIKE %s ORDER BY tubuyaki.id DESC"
+    args = [search_query]
+    result = dbcon(sql, args)
+    return render_template('timeline.html', rows=result)
+  return redirect('http://localhost/')
 
 @application.route('/user/<user_id>')
 def user_prof():
@@ -84,8 +92,6 @@ def login():
     response.set_cookie('user_id', user_id)
     response.set_cookie('user_pass', hashstring)
     print(login_id)
-
-
     return response
 
   return "not login"
