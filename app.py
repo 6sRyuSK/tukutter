@@ -51,7 +51,7 @@ def search():
     args = [search_query]
     result = dbcon(sql, args)
     return render_template('timeline.html', rows=result)
-  return redirect('http://localhost/')
+  return redirect('/')
 
 @application.route('/tweet', methods=['POST'])
 def tweet():
@@ -99,7 +99,7 @@ def login():
     args = [login_id]
     result = dbcon(sql, args)
     user_id = str(result[0][0])
-    response = make_response(redirect('http://localhost/'))
+    response = make_response(redirect('/'))
     response.set_cookie('user_id', user_id)
     response.set_cookie('user_pass', hashstring)
     print(login_id)
@@ -126,7 +126,7 @@ def register():
   args = [login_id]
   result = dbcon(sql, args)
   if result is ():
-    response = make_response(redirect('http://localhost/'))
+    response = make_response(redirect('/'))
     sql = 'INSERT into users(login_id, user_name, user_pass) value (%s, %s, %s)'
     args = [login_id, user_name, hashstring]
     result = dbcon(sql, args)
