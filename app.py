@@ -17,6 +17,17 @@ def dbcon(sql, args):
   con.close()
   return result
 
+def logcheck():
+  login_id = request.cookies.get('login_id', None)
+  user_pass = request.cookies.get('user_pass', None)
+  if login_id and user_pass is not None:
+    sql = 'SELECT user_pass from users where login_id = %s'
+    args = [login_id]
+    result = dbcon(sql, args)
+    if user_pass == result[0][0]:
+      return [True, login_id, user_pass]
+  else:
+    return render_template('login.html')
 
 @application.route('/')
 def top():
@@ -54,15 +65,10 @@ def tubuyaki_show():
 @application.route('/login')
 def login_form():
   
-  login_id = request.cookies.get('login_id', None)
-  user_pass = request.cookies.get('user_pass', None)
-  if login_id or user_pass is not None:
-    sql = 'SELECT user_pass from users where login_id = %s'
-    args = [login_id]
-    result = dbcon(sql, args)
-    if user_pass == result[0][0] and not user_pass == None:
-      return "loginnnnnn!!!!!!siteruyo"
-  return render_template('login.html')
+  log = logcheck()
+  if log[0] is True:
+    return log[1] + "でログイン中です。"
+  return log  #template login_html
 
 @application.route('/login', methods=['POST'])
 def login():
