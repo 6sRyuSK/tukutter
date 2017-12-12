@@ -53,6 +53,17 @@ def search():
     return render_template('timeline.html', rows=result)
   return redirect('http://localhost/')
 
+@application.route('/tweet', methods=['POST'])
+def tweet():
+  tweet = request.form['tweet']
+  log = logcheck()
+  if log[0] is not True:
+    return log  #template login_html
+  sql = 'INSERT into tubuyaki(user_id, content) value (%s, %s)'
+  args = [log[1], tweet]
+  result = dbcon(sql, args)
+  return redirect('http://localhost/')
+
 @application.route('/user/<user_id>')
 def user_prof():
   
