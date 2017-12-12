@@ -62,7 +62,7 @@ def tweet():
   sql = 'INSERT into tubuyaki(user_id, content) value (%s, %s)'
   args = [log[1], tweet]
   result = dbcon(sql, args)
-  return redirect('http://localhost/')
+  return redirect('/')
 
 @application.route('/user/<user_id>')
 def user_prof():
