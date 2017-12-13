@@ -53,16 +53,19 @@ def top():
   sql = "SELECT users.user_name, content, tubuyaki.post_time FROM tubuyaki inner join users on tubuyaki.user_id = users.id inner join follow on tubuyaki.user_id = follow.follow_id where follow.user_id = %s and delete_flg = 0 ORDER BY tubuyaki.id DESC"
   args = [login_user_id]
   result = dbcon(sql, args)
-  return render_template('timeline.html', rows=result)
+  return render_template('timeline.html', rows=result, profile=log)
 
 @application.route('/search')
 def search():
+  log = logcheck()
+  if log[0] is not True:
+    return log  #template login_html
   search_query = "%"+request.args.get('search_query')+"%"
   if search_query is not None:
     sql = "SELECT users.user_name, content, tubuyaki.post_time FROM tubuyaki inner join users on tubuyaki.user_id = users.id where delete_flg = 0 and content LIKE %s ORDER BY tubuyaki.id DESC"
     args = [search_query]
     result = dbcon(sql, args)
-    return render_template('timeline.html', rows=result)
+    return render_template('timeline.html', rows=result, profile=log)
   return redirect('/')
 
 @application.route('/tweet', methods=['POST'])
@@ -78,6 +81,9 @@ def tweet():
 
 @application.route('/user/<show_user_id>/<option>')
 def user_prof(show_user_id, option):
+  log = logcheck()
+  if log[0] is not True:
+    return log  #template login_html
   if 'profile' in option:
     sql = 'SELECT user_name, user_profile from users where login_id = %s'
     args = [show_user_id]
@@ -85,12 +91,12 @@ def user_prof(show_user_id, option):
     sql = 'SELECT users.user_name, tubuyaki.content, tubuyaki.post_time FROM tubuyaki inner join users on tubuyaki.user_id = users.id where delete_flg = 0 and users.login_id = %s ORDER BY tubuyaki.id DESC'
     args = [show_user_id]
     result = dbcon(sql, args)
-    return render_template('profile.html', profile=profile, rows=result)
+    return render_template('profile.html', showprofile=profile, rows=result, profile=log)
   if 'favorite' in option:
     sql = 'SELECT users.user_name, content, tubuyaki.post_time FROM tubuyaki inner join users on tubuyaki.user_id = users.id inner join favorite on tubuyaki.id = favorite.tubuyaki_id where favorite.user_id = %s and delete_flg = 0 ORDER BY tubuyaki.id DESC'
     args = [show_user_id]
     result = dbcon(sql, args)
-    return render_template('timeline.html', rows=result)
+    return render_template('timeline.html', rows=result, profile=log)
 
 
 # @application.route('/profedit')
