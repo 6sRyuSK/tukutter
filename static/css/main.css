@@ -1,0 +1,90 @@
+* {
+  font-family: 'Abel', sans-serif;
+  color: #707070;
+}
+.button {
+  background-color: #f7b52c;
+  color: #FFFFFF;
+}
+input,
+textarea {
+  border: solid 1px #707070;
+}
+.view-pc {
+  display: inline;
+}
+.view-sp {
+  display: none;
+}
+@media (max-width: 599px) {
+  .view-pc {
+      display: none;
+  }
+  .view-sp {
+      display: inline;
+  }
+  header .profile {
+    height: 20vw;
+}
+header .profile img {
+    width: 17%;
+    margin: 1.5vw;
+}
+header .profile p {
+    font-size: 18vw;
+}
+header nav ul li {
+    width: 20%;
+}
+header nav ul li a {
+    display: inline-block;
+    width: 90%;
+    padding: 2vw 0;
+    font-size: 3vw;
+}
+}
+
+header {
+  background-color: #f7b52c;
+}
+header .profile {
+  display: block;
+  width: 100%;
+  padding: 10px;
+}
+header .profile a {
+  text-decoration: none; 
+}
+header .profile p {
+  font-size: 6vw;
+  text-align: center;
+}
+header nav ul {
+  border: solid 1px;
+  background-color: #EEEEEE;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+header nav ul li {
+  text-align: center;
+}
+header nav ul li a {
+  display: inline-block;
+  padding: 0.7vw 0;
+  width: 10vw;
+  font-size: 1.1vw;
+}
+header nav ul li a:hover {
+  text-decoration: none;
+}
+header nav ul li:hover {
+  background-color: #EEEEEE;
+  filter:brightness(80%);
+}
+header nav ul.fixed {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding-top: 8px;
+}
