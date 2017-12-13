@@ -76,17 +76,21 @@ def tweet():
   result = dbcon(sql, args)
   return redirect('/')
 
-@application.route('/user/<show_user_id>/')
-def user_prof(show_user_id):
-  sql = 'SELECT user_name, user_profile from users where login_id = %s'
-  args = [show_user_id]
-  profile = dbcon(sql, args)
-  sql = 'SELECT users.user_name, tubuyaki.content, tubuyaki.post_time FROM tubuyaki inner join users on tubuyaki.user_id = users.id where delete_flg = 0 and users.login_id = %s ORDER BY tubuyaki.id DESC'
-  args = [show_user_id]
-  result = dbcon(sql, args)
-  print(str(profile))
-  print(str(result))
-  return render_template('profile.html', profile=profile, rows=result)
+@application.route('/user/<show_user_id>/<option>')
+def user_prof(show_user_id, option):
+  if 'profile' in option:
+    sql = 'SELECT user_name, user_profile from users where login_id = %s'
+    args = [show_user_id]
+    profile = dbcon(sql, args)
+    sql = 'SELECT users.user_name, tubuyaki.content, tubuyaki.post_time FROM tubuyaki inner join users on tubuyaki.user_id = users.id where delete_flg = 0 and users.login_id = %s ORDER BY tubuyaki.id DESC'
+    args = [show_user_id]
+    result = dbcon(sql, args)
+    return render_template('profile.html', profile=profile, rows=result)
+  if 'favorite' in option:
+    sql = 'SELECT users.user_name, content, tubuyaki.post_time FROM tubuyaki inner join users on tubuyaki.user_id = users.id inner join favorite on tubuyaki.id = favorite.tubuyaki_id where favorite.user_id = %s and delete_flg = 0 ORDER BY tubuyaki.id DESC'
+    args = [show_user_id]
+    result = dbcon(sql, args)
+    return render_template('timeline.html', rows=result)
 
 
 # @application.route('/profedit')
