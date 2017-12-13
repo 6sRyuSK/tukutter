@@ -1,16 +1,35 @@
 <!DOCTYPE html>
-<html lang="jp">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>login</title>
+  <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/reset.css">
+  <link rel="stylesheet" href="/static/css/main.css">
+  <link rel="stylesheet" href="/static/css/login.min.css">
+  <title>tukutter | login</title>
 </head>
 <body>
-  <form action="/login" method="post">
-    <input type="text" name="login_id"> 
-    <input type="password" name="user_pass">
-    <input type="submit" name="submit" value="login">
-  </form>
+  <main id="login">
+    <div class="logo">
+      <img class="logo-pic" src="/static/img/logo-pic.png" alt="">
+      <img class="logo-text" src="/static/img/logo-text.png" alt="">
+    </div>
+    <form action="#" method="post">
+      <div class="inline">
+        <label for="login_id">user ID</label>
+        <input type="text" name="login_id" value="">
+      </div>
+      <div class="inline">
+        <label for="user_pass">password</label>
+        <input type="password" name="user_pass" value="">
+      </div>
+      <input class="button" type="submit" name="submit" value="Log in">
+    </form>
+    <div class="registration">
+      <p><a href="#">新規会員登録する</a></p>
+    </div>
+  </main>
 </body>
 </html>

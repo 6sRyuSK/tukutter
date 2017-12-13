@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block head %}
+  <link rel="stylesheet" href="/static/css/profile.min.css">
+  <script type="text/javascript" src="/static/js/profile.js"></script>
+  <title>tukutter</title>
+{% endblock %}
+{% block body %}
+  <main id="profile">
+
+    <div class="profilecard">
+      <div class="profile-header">
+        <img src="/static/img/profile.png" alt="">
+        <p><span class="user-name">{{showprofile[0][0]}}</span><a href="#"><img class="edit" src="/static/img/pencil.png" alt=""></a></p>
+      </div>
+      <div class="profile-content">
+        <p>{{showprofile[0][1]}}</p>
+      </div>
+    </div>
+
+    <div class="stream">
+        {% for row in rows %}  
+          <div class="content">
+            <div class="stream-header">
+              <a href=""><img src="/static/img/profile.png" alt=""></a>
+              <p>
+                <a href=""><span class="user-name">{{row[0]}}</span></a>
+                <span class="tweet-time">{{row[2]}}</span>
+                <span class="follow">フォロー中</span>
+              </p>
+            </div>
+            <div class="inline">
+              <div class="stream-content">
+                <p>{{row[1]}}</p>
+              </div>
+              <div class="stream-footer">
+                <div class="favorite">
+                  <a href="#"><img src="/static/img/logo-pic.png" alt=""></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+  </main>
+{% endblock %}

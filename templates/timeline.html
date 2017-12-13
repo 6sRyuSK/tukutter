@@ -1,27 +1,52 @@
-<!-- {% extends "layout.html" %} -->
+{% extends "layout.html" %}
 
-{% block title %}
-一覧
+{% block head %}
+<link rel="stylesheet" href="/static/css/timeline.css">
+<script type="text/javascript" src="/static/js/timeline.js"></script>
+<title>tukutter | top</title>
 {% endblock %}
 
 {% block body %}
 
-<!-- <table border="1">
-{% for row in rows %}
-  <tr>
-    <td>{{row[1]}}<td>
-    <td><a href="/edit/{{row[0]}}">詳細見る</a></td>
-    <td><a href="/delete/{{row[0]}}">削除</a></td>
-  </tr>
+<main id="index">
   
- {% endfor %}
-
-</table> -->
-<div class="contents">
-{% for row in rows %}  
-  <p>{{row[0]}}</p>
-  <p>{{row[1]}}</p>
-{% endfor %}
-</div>
+  <div class="search" style="display:none">
+    <form class="search-form" action="/search" method="get">
+      <input class="search-input" type="text" name="search_query" value="">
+      <input type="submit" name="submit" value="検索">
+    </form>
+  </div>
+  <div class="tweet" style="display:none">
+    <form class="tweet-form" action="/tweet" method="post">
+      <textarea name="tweet"></textarea>
+      <input type="submit" name="submit" value="つぶやく">
+    </form>
+  </div>
+  <div class="stream">
+    {% for row in rows %}  
+      <div class="content">
+        <div class="stream-header">
+          <a href=""><img src="/static/img/profile.png" alt=""></a>
+          <p>
+            <a href="/user/{{row[0]}}/profile"><span class="user-name">{{row[0]}}</span></a>
+            <span class="tweet-time">{{row[2]}}</span>
+            <span class="follow">フォロー中</span>
+          </p>
+        </div>
+        <div class="inline">
+          <div class="stream-content">
+            <p>{{row[1]}}</p>
+          </div>
+          <div class="stream-footer">
+            <div class="favorite">
+              <a href="#"><img src="/static/img/logo-pic.png" alt=""></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  
+</main>
 
 {% endblock %}

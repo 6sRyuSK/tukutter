@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/reset.css">
+  <link rel="stylesheet" href="/static/css/main.css">
+  <link rel="stylesheet" href="/static/css/profile_edit.min.css">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/static/js/profile_edit.js"></script>
+  <title>tukutter | プロフィール編集</title>
+</head>
+<body>
+  <main id="profile_edit">
+    <div class="logo">
+      <p>ユーザー登録</p>
+    </div>
+    <form action="/profedit" method="post" enctype="multipart/form-data" >
+      <div class="inline">
+        <label for="img_file">image</label>
+        <input type="file" name="img_file" value="">
+        <!-- <label for="file" class="view_box">
+          +画像を選択
+          <input id="file" class="file" type="file" name="file" value="" style="display:none;">
+        </label> -->
+      </div>
+      <!-- <div class="inline">
+        <label for="login_id">user ID</label>
+        <input type="text" name="login_id" value="">
+      </div>
+      <div class="inline">
+        <label for="user_pass">password</label>
+        <input type="password" name="user_pass" value="">
+      </div>
+      <div class="inline">
+        <label for="user_pass_confirm">password確認</label>
+        <input type="password" name="user_pass_confirm" value="">
+      </div>
+      <div class="inline">
+        <label for="password">お名前</label>
+        <input type="text" name="username" value="">
+      </div>
+      <div class="inline">
+        <label for="user_profile">ひと言</label>
+        <textarea type="text" name="user_profile" value=""></textarea>
+      </div> -->
+      <input class="button" type="submit" name="submit" value="登録">
+    </form>
+  </main>
+</body>
+</html>
