@@ -76,11 +76,18 @@ def tweet():
   result = dbcon(sql, args)
   return redirect('/')
 
-@application.route('/user/<user_id>')
-def user_prof():
-  
+@application.route('/user/<show_user_id>/')
+def user_prof(show_user_id):
+  sql = 'SELECT user_name, user_profile from users where login_id = %s'
+  args = [show_user_id]
+  profile = dbcon(sql, args)
+  sql = 'SELECT users.user_name, tubuyaki.content, tubuyaki.post_time FROM tubuyaki inner join users on tubuyaki.user_id = users.id where delete_flg = 0 and users.login_id = %s ORDER BY tubuyaki.id DESC'
+  args = [show_user_id]
+  result = dbcon(sql, args)
+  print(str(profile))
+  print(str(result))
+  return render_template('profile.html', profile=profile, rows=result)
 
-  return "user_profile" + user_id
 
 # @application.route('/profedit')
 # def profedit_form():
