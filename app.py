@@ -1,8 +1,16 @@
 import MySQLdb
 from flask import Flask, render_template, request, redirect, make_response
 import hashlib
+# from werkzeug import secure_filename
+# import os
 
 application = Flask(__name__)
+
+# UPLOAD_FOLDER = '/static/userimg'
+# ALLOWED_EXTENSIONS = set(['png', 'jpg'])
+# application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# application.config['SECRET_KEY'] = os.urandom(24)
+# application.config['DEBUG'] = True
 
 def dbcon(sql, args):
   db = MySQLdb.connect( user='root', passwd='root', host='localhost', db='tukutter', charset='utf8' )
@@ -30,6 +38,10 @@ def logcheck():
       return [True, user_id, login_id, user_name]
   else:
     return render_template('login.html')
+
+# def allowed_file(filename):
+#     return '.' in filename and \
+#         filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 @application.route('/')
 def top():
@@ -69,6 +81,29 @@ def user_prof():
   
 
   return "user_profile" + user_id
+
+# @application.route('/profedit')
+# def profedit_form():
+#   return render_template('profile_edit.html')
+
+# @application.route('/profedit', methods=['POST'])
+# def profedit():
+#   img_file = request.form['image']
+#   # login_id = request.form['login_id']
+#   # user_name = request.form['user_name']
+#   # user_pass = request.form['user_pass']
+#   # user_profile = request.form['user_profile']
+#   # hashstring = hashlib.md5(user_pass.encode('utf-8')).hexdigest()
+#   print(img_file)
+#   print('-------------------------------')
+#   if img_file and allowed_file(img_file.filename):
+#       filename = secure_filename(img_file.filename)
+#       img_file.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
+#       img_url = '/static/userimg/' + filename
+#       return redirect('/')
+#   else:
+#       return ''' <p>許可されていない拡張子です</p> '''
+
 
 
 @application.route('/tubuyaki/<tubuyaki_id>')
